@@ -9,26 +9,14 @@ import { version } from 'terra-modal/package.json';
 import ModalSrc from '!raw-loader!terra-modal/src/Modal';
 
 // Example Files
-import ModalIsOpened from './ModalIsOpened';
-import ModalOpenByClickOn from './ModalOpenByClickOn';
-import ModalDisableCloseOnEscCloseOnOutsideClick from './ModalDisableCloseOnEscCloseOnOutsideClick';
-import ModalIsFullscreen from './ModalIsFullscreen';
+import ModalDefault from './ModalDefault';
 
 const ModalExamples = () => (
   <div>
-    <div id="version">Version: {version}</div>
-    <Markdown id="readme" src={ReadMe} />
-    <PropsTable id="props-table" src={ModalSrc} />
-    <h2 id="isOpened">Using isOpened prop</h2>
-    <ModalIsOpened />
-    <h2 id="openByClickOn">Using openByClickOn prop</h2>
-    <ModalOpenByClickOn />
-    <hr />
-    <h2 id="closeOnEsc-closeOnOutsideClick">Disable Close on esc and close on outside click</h2>
-    <ModalDisableCloseOnEscCloseOnOutsideClick />
-    <h2 id="isFullscreen">Enable isFullscreen</h2>
-    <ModalIsFullscreen />
+    <ModalDefault />
   </div>
 );
 
 export default ModalExamples;
+
+

@@ -6,19 +6,21 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactPortal = require('react-portal');
+var _reactModal = require('react-modal');
 
-var _reactPortal2 = _interopRequireDefault(_reactPortal);
+var _reactModal2 = _interopRequireDefault(_reactModal);
 
-var _ModalContent = require('./ModalContent');
+var _ModalAccessibility = require('./ModalAccessibility');
 
-var _ModalContent2 = _interopRequireDefault(_ModalContent);
+var _ModalAccessibility2 = _interopRequireDefault(_ModalAccessibility);
+
+var _classnames = require('classnames');
+
+var _classnames2 = _interopRequireDefault(_classnames);
 
 require('./Modal.scss');
 
@@ -26,156 +28,129 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
 var propTypes = {
   /**
-   * String that labels the modal for screen readers
-   **/
-  ariaLabel: _react.PropTypes.string.isRequired,
-  /**
-   * This callback is called when the closing event is triggered but it prevents normal removal from the DOM. So, you can do some DOMNode animation first and then call removeFromDOM() that removes the modal from DOM.
-   **/
-  beforeClose: _react.PropTypes.func,
-  /**
-   * Content inside the modal dialog
-   **/
+    Child nodes.
+  */
   children: _react.PropTypes.node.isRequired,
   /**
-   * CSS classnames that are append to the modal
-   **/
-  classNameModal: _react.PropTypes.string,
-  /**
-   * CSS classnames that are append to the overlay
-   **/
-  classNameOverlay: _react.PropTypes.string,
-  /**
-   * If set to true, the modal will close when the esc key is pressed
-   **/
-  closeOnEsc: _react.PropTypes.bool,
-  /**
-   * If set to true, the modal will close when a mouseclick is triggered outside the modal
-   **/
-  closeOnOutsideClick: _react.PropTypes.bool,
-  /**
-   * If set to true, the modal will be fullscreen on all breakpoint sizes
-   **/
+    Boolean describing if the modal should be fullscreen or not.
+  */
   isFullscreen: _react.PropTypes.bool,
   /**
-   * If set to true, the modal will rendered as opened
-   **/
-  isOpened: _react.PropTypes.bool,
+    Boolean describing if the modal should be shown or not.
+  */
+  isOpen: _react.PropTypes.bool.isRequired,
   /**
-   * If set to true, the modal dialog with have overflow-y set to scroll.
-   * It is recommended not to use this prop and instead create a HOC
-   * with the modal dialog body set to scroll.
-   **/
+    Boolean describing if the modal should be scrollable or not. It is recommended to not use this and
+    instead have the body of the modal scroll.
+  */
   isScrollable: _react.PropTypes.bool,
   /**
-   * This callback is called when the modal closes and after beforeClose.
-   **/
-  onClose: _react.PropTypes.func,
+    Function that will be run after the modal has opened.
+  */
+  onAfterOpen: _react.PropTypes.func,
   /**
-   * This callback is called when the modal is opened and rendered (useful for animating the DOMNode).
-   **/
-  onOpen: _react.PropTypes.func,
+    Function that will be run when the modal is requested to be closed, prior to actually closing.
+  */
+  onRequestClose: _react.PropTypes.func,
   /**
-   * This callback is called when the modal is (re)rendered.
-   **/
-  onUpdate: _react.PropTypes.func,
+    Number indicating the milliseconds to wait before closing the modal.
+  */
+  closeTimeoutMS: _react.PropTypes.number,
   /**
-   * The second way how to open the modal. This element will be rendered by the modal immediately with onClick handler that triggers modal opening. Notice that you don't have to deal with the open/close state (like when using the isOpen prop).
-   **/
-  openByClickOn: _react.PropTypes.element,
+    String indicating how the content container should be announced to screenreaders
+  */
+  contentLabel: _react.PropTypes.string.isRequired,
   /**
-   * Role attribute on the modal dialog
-   **/
-  role: _react.PropTypes.string
+     String className to be applied to the portal.
+  */
+  portalClassName: _react.PropTypes.string,
+  /**
+     String className to be applied to the overlay.
+  */
+  overlayClassName: _react.PropTypes.string,
+  /**
+     String className to be applied to the modal content.
+  */
+  className: _react.PropTypes.string,
+  /**
+    Boolean indicating if the appElement should be hidden
+  */
+  ariaHideApp: _react.PropTypes.bool,
+  /**
+    Boolean indicating if clicking on the overlay should close the modal.
+  */
+  shouldCloseOnOverlayClick: _react.PropTypes.bool,
+  /**
+    String indicating the role of the modal, allowing the 'dialog' role to be applied if desired.
+  */
+  role: _react.PropTypes.string,
+  /**
+    Function that will be called to get the parent element that the modal will be attached to.
+  */
+  parentSelector: _react.PropTypes.func
 };
 
 var defaultProps = {
-  ariaLabel: null,
-  children: null,
-  classNameModal: null,
-  classNameOverlay: null,
-  closeOnEsc: true,
-  closeOnOutsideClick: true,
   isFullscreen: false,
-  isOpened: false,
+  isOpen: false,
   isScrollable: false,
-  openByClickOn: null,
-  role: 'document'
+  closeTimeoutMS: 0,
+  ariaHideApp: true,
+  shouldCloseOnOverlayClick: true,
+  role: 'dialog',
+  parentSelector: function parentSelector() {
+    return document.body;
+  }
 };
 
-/* eslint-disable react/prefer-stateless-function */
+var Modal = function Modal(_ref) {
+  var isFullscreen = _ref.isFullscreen,
+      isOpen = _ref.isOpen,
+      isScrollable = _ref.isScrollable,
+      onAfterOpen = _ref.onAfterOpen,
+      onRequestClose = _ref.onRequestClose,
+      closeTimeoutMS = _ref.closeTimeoutMS,
+      contentLabel = _ref.contentLabel,
+      portalClassName = _ref.portalClassName,
+      overlayClassName = _ref.overlayClassName,
+      className = _ref.className,
+      ariaHideApp = _ref.ariaHideApp,
+      shouldCloseOnOverlayClick = _ref.shouldCloseOnOverlayClick,
+      role = _ref.role,
+      parentSelector = _ref.parentSelector,
+      children = _ref.children,
+      customProps = _objectWithoutProperties(_ref, ['isFullscreen', 'isOpen', 'isScrollable', 'onAfterOpen', 'onRequestClose', 'closeTimeoutMS', 'contentLabel', 'portalClassName', 'overlayClassName', 'className', 'ariaHideApp', 'shouldCloseOnOverlayClick', 'role', 'parentSelector', 'children']);
 
-var Modal = function (_React$Component) {
-  _inherits(Modal, _React$Component);
+  var modalclasses = (0, _classnames2.default)([{ 'terra-Modal--fullscreen': isFullscreen }, { 'terra-Modal--scrollable': isScrollable }, 'terra-Modal', className]);
 
-  function Modal() {
-    _classCallCheck(this, Modal);
+  var overlayclasses = (0, _classnames2.default)(['terra-Modal-overlay', overlayClassName]);
 
-    return _possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).apply(this, arguments));
-  }
+  var portalclasses = (0, _classnames2.default)(['terra-Modal-portal', portalClassName]);
 
-  _createClass(Modal, [{
-    key: 'render',
-    value: function render() {
-      var _props = this.props,
-          ariaLabel = _props.ariaLabel,
-          beforeClose = _props.beforeClose,
-          children = _props.children,
-          classNameModal = _props.classNameModal,
-          classNameOverlay = _props.classNameOverlay,
-          closeOnEsc = _props.closeOnEsc,
-          closeOnOutsideClick = _props.closeOnOutsideClick,
-          isFullscreen = _props.isFullscreen,
-          isOpened = _props.isOpened,
-          isScrollable = _props.isScrollable,
-          onClose = _props.onClose,
-          onOpen = _props.onOpen,
-          onUpdate = _props.onUpdate,
-          openByClickOn = _props.openByClickOn,
-          role = _props.role,
-          customProps = _objectWithoutProperties(_props, ['ariaLabel', 'beforeClose', 'children', 'classNameModal', 'classNameOverlay', 'closeOnEsc', 'closeOnOutsideClick', 'isFullscreen', 'isOpened', 'isScrollable', 'onClose', 'onOpen', 'onUpdate', 'openByClickOn', 'role']);
+  return _react2.default.createElement(
+    _reactModal2.default,
+    _extends({
+      isOpen: isOpen,
+      onAfterOpen: onAfterOpen,
+      onRequestClose: onRequestClose,
+      closeTimeoutMS: closeTimeoutMS,
+      contentLabel: contentLabel,
+      portalClassName: portalclasses,
+      overlayClassName: overlayclasses,
+      className: modalclasses,
+      ariaHideApp: ariaHideApp,
+      shouldCloseOnOverlayClick: shouldCloseOnOverlayClick,
+      role: role,
+      parentSelector: parentSelector
+    }, customProps),
+    _react2.default.createElement(_ModalAccessibility2.default, null),
+    children
+  );
+};
 
-      return _react2.default.createElement(
-        _reactPortal2.default,
-        _extends({
-          isOpened: isOpened,
-          closeOnEsc: closeOnEsc,
-          closeOnOutsideClick: closeOnOutsideClick,
-          openByClickOn: openByClickOn,
-          onClose: onClose,
-          onOpen: onOpen,
-          onUpdate: onUpdate,
-          beforeClose: beforeClose
-        }, customProps),
-        _react2.default.createElement(
-          _ModalContent2.default,
-          {
-            closeOnOutsideClick: closeOnOutsideClick,
-            ariaLabel: ariaLabel,
-            classNameModal: classNameModal,
-            classNameOverlay: classNameOverlay,
-            role: role,
-            isFullscreen: isFullscreen,
-            isScrollable: isScrollable
-          },
-          children
-        )
-      );
-    }
-  }]);
-
-  return Modal;
-}(_react2.default.Component);
-
-Modal.propTypes = propTypes;
 Modal.defaultProps = defaultProps;
+Modal.propTypes = propTypes;
 
 exports.default = Modal;

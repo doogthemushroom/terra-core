@@ -49,6 +49,8 @@ import ModalTestRoutes from 'terra-modal/tests/nightwatch/ModalTestRoutes';
 import TestLinks from './TestLinks';
 /* eslint-enable import/first */
 
+import Test from './examples/test/Index';
+
 ReactDOM.render((
   <Router history={hashHistory}>
     <Redirect from="/" to="/site" />
@@ -75,6 +77,7 @@ ReactDOM.render((
       <Route path="status" component={StatusExamples} />
       <Route path="title" component={TitleExamples} />
       <Route path="table" component={TableExamples} />
+      <Route path="test" component={Test} />
     </Route>
     <Route path="/tests" component={TestLinks} />
     {ArrangeTestRoutes}

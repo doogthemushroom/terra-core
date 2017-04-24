@@ -31,10 +31,9 @@
   },
   "dependencies": {
     "classnames": "^2.2.5",
-    "focus-trap-react": "^3.0.2",
+    "react-modal": "^1.7.7",
     "terra-base": "^0.x",
-    "terra-mixins": "^1.0.0",
-    "react-portal": "^3.0.0"
+    "terra-mixins": "^1.0.0"
   },
   "scripts": {
     "compile": "npm run compile:clean && npm run compile:build",
