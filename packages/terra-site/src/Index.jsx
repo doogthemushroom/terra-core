@@ -13,6 +13,7 @@ import ButtonGroupExamples from './examples/button-group/Index';
 import ContentExamples from './examples/content/Index';
 import ContentContainerExamples from './examples/content-container/Index';
 import DatePickerExamples from './examples/date-picker/Index';
+import FuzzyDatePickerExamples from './examples/fuzzy-date-picker/Index';
 import GridExamples from './examples/grid/Index';
 import I18nExamples from './examples/i18n/Index';
 import IconExamples from './examples/icon/Index';
