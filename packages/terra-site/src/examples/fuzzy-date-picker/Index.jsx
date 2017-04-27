@@ -11,6 +11,8 @@ const FuzzyDatePickerExamples = () => (
   <div>
     <div id="version">Version: {version}</div>
     <Markdown id="readme" src={ReadMe} />
+    <h2 id="default">Default</h2>
+    <FuzzyDatePicker startYear={1999} endYear={2017}/>
   </div>
 );
 
