@@ -58,7 +58,7 @@ var FuzzyDatePicker = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (FuzzyDatePicker.__proto__ || Object.getPrototypeOf(FuzzyDatePicker)).call(this, props));
 
-    _this.state = { granularity: 'YEAR', precision: 'About', fuzzyDate: (0, _moment2.default)() };
+    _this.state = { granularity: 'MONTHYEAR', precision: 'About', fuzzyDate: (0, _moment2.default)() };
 
     // This binding is necessary to make `this` work in the callback
     _this.renderYears = _this.renderYears.bind(_this);
