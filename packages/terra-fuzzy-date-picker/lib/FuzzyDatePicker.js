@@ -28,6 +28,8 @@ var _DatePicker = require('/Users/dw034710/Documents/Repos/terra-core/packages/t
 
 var _DatePicker2 = _interopRequireDefault(_DatePicker);
 
+require('./FuzzyDatePicker.scss');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -39,26 +41,14 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var propTypes = {
-  /**
-   * Make some of these state based?
-   */
-  startYear: _react.PropTypes.number,
+  // ISO formatted dates
 
-  endYear: _react.PropTypes.number,
+  minDate: _react.PropTypes.string,
 
-  basisDate: _react.PropTypes.oneOfType([_react.PropTypes.object])
+  maxDate: _react.PropTypes.string,
+
+  basisDate: _react.PropTypes.string
 };
-
-// Render the years
-function renderYears(start, end) {
-  return Array(end - start + 1).fill(undefined).map(function (x, idx) {
-    return _react2.default.createElement(
-      'option',
-      { key: 'year' + start + idx, value: start + idx },
-      start + idx
-    );
-  });
-}
 
 var FuzzyDatePicker = function (_React$Component) {
   _inherits(FuzzyDatePicker, _React$Component);
@@ -68,78 +58,58 @@ var FuzzyDatePicker = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, (FuzzyDatePicker.__proto__ || Object.getPrototypeOf(FuzzyDatePicker)).call(this, props));
 
-    _this.state = { granularity: 'YEAR', precision: 'About', fuzzyYear: _this.props.startYear, fuzzyMonth: 'January', fuzzyDate: (0, _moment2.default)().format('ll') };
+    _this.state = { granularity: 'YEAR', precision: 'About', fuzzyDate: (0, _moment2.default)() };
 
     // This binding is necessary to make `this` work in the callback
-    _this.toggleAbout = _this.toggleAbout.bind(_this);
-    _this.toggleBefore = _this.toggleBefore.bind(_this);
-    _this.toggleAfter = _this.toggleAfter.bind(_this);
-    _this.toggleUnknown = _this.toggleUnknown.bind(_this);
-    _this.toggleAge = _this.toggleAge.bind(_this);
-    _this.toggleYear = _this.toggleYear.bind(_this);
-    _this.toggleMonthYear = _this.toggleMonthYear.bind(_this);
-    _this.toggleDate = _this.toggleDate.bind(_this);
+    _this.renderYears = _this.renderYears.bind(_this);
+    _this.togglePrecision = _this.togglePrecision.bind(_this);
+    _this.toggleGranularity = _this.toggleGranularity.bind(_this);
     _this.changeYear = _this.changeYear.bind(_this);
     _this.changeMonth = _this.changeMonth.bind(_this);
     _this.changeDate = _this.changeDate.bind(_this);
     return _this;
   }
 
+  // Render the years
+
+
   _createClass(FuzzyDatePicker, [{
-    key: 'toggleAbout',
-    value: function toggleAbout() {
-      this.setState({ precision: 'About' });
+    key: 'renderYears',
+    value: function renderYears(start, end) {
+      return Array(end - start + 1).fill(undefined).map(function (x, idx) {
+        var year = start + idx;
+        return _react2.default.createElement(
+          'option',
+          { key: 'year' + year, value: year },
+          year
+        );
+      });
     }
   }, {
-    key: 'toggleBefore',
-    value: function toggleBefore() {
-      this.setState({ precision: 'Before' });
+    key: 'togglePrecision',
+    value: function togglePrecision(value) {
+      this.setState({ precision: value });
     }
   }, {
-    key: 'toggleAfter',
-    value: function toggleAfter() {
-      this.setState({ precision: 'After' });
-    }
-  }, {
-    key: 'toggleUnknown',
-    value: function toggleUnknown() {
-      this.setState({ precision: 'Unknown' });
-    }
-  }, {
-    key: 'toggleAge',
-    value: function toggleAge() {
-      this.setState({ granularity: 'AGE' });
-    }
-  }, {
-    key: 'toggleYear',
-    value: function toggleYear() {
-      this.setState({ granularity: 'YEAR' });
-    }
-  }, {
-    key: 'toggleMonthYear',
-    value: function toggleMonthYear() {
-      this.setState({ granularity: 'MONTHYEAR' });
-    }
-  }, {
-    key: 'toggleDate',
-    value: function toggleDate() {
-      this.setState({ granularity: 'DATE' });
+    key: 'toggleGranularity',
+    value: function toggleGranularity(value) {
+      this.setState({ granularity: value });
     }
   }, {
     key: 'changeYear',
     value: function changeYear(event) {
-      this.setState({ fuzzyYear: event.target.value });
+      this.setState({ fuzzyDate: this.state.fuzzyDate.year(event.target.value) });
     }
   }, {
     key: 'changeMonth',
     value: function changeMonth(event) {
-      this.setState({ fuzzyMonth: event.target.value });
+      this.setState({ fuzzyDate: this.state.fuzzyDate.month(event.target.value) });
     }
   }, {
     key: 'changeDate',
     value: function changeDate(event) {
       // Returns a moment event object
-      this.setState({ fuzzyDate: event.format('ll') });
+      this.setState({ fuzzyDate: event });
     }
 
     // Getting our feet wet
@@ -147,6 +117,8 @@ var FuzzyDatePicker = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       return _react2.default.createElement(
         'div',
         { className: 'terra-fuzzy' },
@@ -155,22 +127,30 @@ var FuzzyDatePicker = function (_React$Component) {
           { className: 'list-selectable list-divided' },
           _react2.default.createElement(
             'li',
-            { onClick: this.toggleAbout },
+            { className: this.state.precision === 'About' ? "selected" : null, onClick: function onClick() {
+                return _this2.togglePrecision('About');
+              } },
             'About'
           ),
           _react2.default.createElement(
             'li',
-            { onClick: this.toggleBefore },
+            { className: this.state.precision === 'Before' ? "selected" : null, onClick: function onClick() {
+                return _this2.togglePrecision('Before');
+              } },
             'Before'
           ),
           _react2.default.createElement(
             'li',
-            { onClick: this.toggleAfter },
+            { className: this.state.precision === 'After' ? "selected" : null, onClick: function onClick() {
+                return _this2.togglePrecision('After');
+              } },
             'After'
           ),
           _react2.default.createElement(
             'li',
-            { onClick: this.toggleUnknown },
+            { className: this.state.precision === 'Unknown' ? "selected" : null, onClick: function onClick() {
+                return _this2.togglePrecision('Unknown');
+              } },
             'Unknown'
           )
         ),
@@ -180,108 +160,116 @@ var FuzzyDatePicker = function (_React$Component) {
           { className: 'list-selectable list-divided' },
           _react2.default.createElement(
             'li',
-            { onClick: this.toggleAge },
+            { className: this.state.granularity === 'BASISDATE' ? "selected" : null, onClick: function onClick() {
+                return _this2.toggleGranularity('BASISDATE');
+              } },
             'Basis date'
           ),
           _react2.default.createElement(
             'li',
-            { onClick: this.toggleYear },
+            { className: this.state.granularity === 'YEAR' ? "selected" : null, onClick: function onClick() {
+                return _this2.toggleGranularity('YEAR');
+              } },
             'Year'
           ),
           _react2.default.createElement(
             'li',
-            { onClick: this.toggleMonthYear },
+            { className: this.state.granularity === 'MONTHYEAR' ? "selected" : null, onClick: function onClick() {
+                return _this2.toggleGranularity('MONTHYEAR');
+              } },
             'Month/Year'
           ),
           _react2.default.createElement(
             'li',
-            { onClick: this.toggleDate },
+            { className: this.state.granularity === 'DATE' ? "selected" : null, onClick: function onClick() {
+                return _this2.toggleGranularity('DATE');
+              } },
             'Date'
           )
         ),
         _react2.default.createElement('br', null),
-        this.state.granularity === 'AGE' ? _react2.default.createElement(
+        this.state.granularity === 'BASISDATE' ? _react2.default.createElement(
           'p',
           null,
-          this.props.basisDate.toString()
+          (0, _moment2.default)(this.props.basisDate).format('ll')
         ) : null,
         this.state.granularity === 'MONTHYEAR' ? _react2.default.createElement(
           'select',
-          { onChange: this.changeMonth, name: 'month' },
+          { onChange: this.changeMonth, value: this.state.fuzzyDate.month(), name: 'month' },
           _react2.default.createElement(
             'option',
-            { value: 'January' },
+            { value: '0' },
             'January'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'February' },
+            { value: '1' },
             'February'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'March' },
+            { value: '2' },
             'March'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'April' },
+            { value: '3' },
             'April'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'May' },
+            { value: '4' },
             'May'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'June' },
+            { value: '5' },
             'June'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'July' },
+            { value: '6' },
             'July'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'August' },
+            { value: '7' },
             'August'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'September' },
+            { value: '8' },
             'September'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'October' },
+            { value: '9' },
             'October'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'November' },
+            { value: '10' },
             'November'
           ),
           _react2.default.createElement(
             'option',
-            { value: 'December' },
+            { value: '11' },
             'December'
           )
         ) : null,
         this.state.granularity === 'YEAR' || this.state.granularity === 'MONTHYEAR' ? _react2.default.createElement(
           'select',
-          { onChange: this.changeYear, name: 'year' },
-          renderYears(this.props.startYear, this.props.endYear)
+          { onChange: this.changeYear, value: this.state.fuzzyDate.year(), name: 'year' },
+          this.renderYears((0, _moment2.default)(this.props.minDate).year(), (0, _moment2.default)(this.props.maxDate).year())
         ) : null,
-        this.state.granularity === 'DATE' ? _react2.default.createElement(_DatePicker2.default, { onChange: this.changeDate }) : null,
+        this.state.granularity === 'DATE' ? _react2.default.createElement(_DatePicker2.default, { onChange: this.changeDate, minDate: (0, _moment2.default)(this.props.minDate), maxDate: (0, _moment2.default)(this.props.maxDate), selectedDate: this.state.fuzzyDate }) : null,
         _react2.default.createElement('br', null),
         _react2.default.createElement('br', null),
         _react2.default.createElement(
           'p',
           null,
           'Fuzzy Date: ',
-          this.state.precision + " " + (this.state.granularity === 'DATE' ? this.state.fuzzyDate : this.state.granularity === 'YEAR' ? this.state.fuzzyYear : this.state.fuzzyMonth + " " + this.state.fuzzyYear)
+          this.state.precision === 'Unknown' ? this.state.precision : this.state.precision + " " + (this.state.granularity === 'DATE' ? this.state.fuzzyDate.format('ll') : this.state.granularity === 'YEAR' ? this.state.fuzzyDate.format('YYYY') : this.state.fuzzyDate.format('MMM YYYY'))
         )
       );
     }

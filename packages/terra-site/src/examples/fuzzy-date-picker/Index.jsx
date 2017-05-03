@@ -12,8 +12,14 @@ const FuzzyDatePickerExamples = () => (
   <div>
     <div id="version">Version: {version}</div>
     <Markdown id="readme" src={ReadMe} />
-    <h2 id="default">Default</h2>
-    <FuzzyDatePicker startYear={1999} endYear={2017} granularity={'DATE'} basisDate={moment().subtract(8, 'years').format('ll')}/>
+    <h2>TODO</h2>
+    <ul>
+      <li>Basis date calculation</li>
+      <li>Cleanup, cleanup</li>
+    </ul>
+    <br/>
+    <h2 id="default">Default with initialization</h2>
+    <FuzzyDatePicker minDate={moment('2000-01-01').format()} maxDate={moment().format()} basisDate={moment().subtract(8, 'years').format()}/>
   </div>
 );
 

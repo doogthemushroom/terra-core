@@ -5,86 +5,64 @@ import 'terra-base/lib/baseStyles';
 import List from '/Users/dw034710/Documents/Repos/terra-core/packages/terra-list';
 import SingleSelectList from '/Users/dw034710/Documents/Repos/terra-core/packages/terra-list/lib/SingleSelectList';
 import DatePicker from '/Users/dw034710/Documents/Repos/terra-core/packages/terra-date-picker/src/DatePicker';
+import './FuzzyDatePicker.scss';
+
 
 const propTypes = {
-  /**
-   * Make some of these state based?
-   */
-  startYear: PropTypes.number,
+  // ISO formatted dates
 
-  endYear: PropTypes.number,
+  minDate: PropTypes.string,
 
-  basisDate: PropTypes.oneOfType([PropTypes.object]),
+  maxDate: PropTypes.string,
+
+  basisDate: PropTypes.string,
 };
-
-// Render the years
-function renderYears(start, end) {
-  return Array(end - start + 1).fill(undefined).map((x, idx) => <option key={'year' + start + idx} value={start + idx}>{start + idx}</option>);
-}
 
 class FuzzyDatePicker extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {granularity: 'YEAR', precision: 'About', fuzzyYear: this.props.startYear, fuzzyMonth: 'January', fuzzyDate: moment().format('ll')};
+    this.state = {granularity: 'MONTHYEAR', precision: 'About', fuzzyDate: moment()};
 
     // This binding is necessary to make `this` work in the callback
-    this.toggleAbout = this.toggleAbout.bind(this);
-    this.toggleBefore = this.toggleBefore.bind(this);
-    this.toggleAfter = this.toggleAfter.bind(this);
-    this.toggleUnknown = this.toggleUnknown.bind(this);
-    this.toggleAge = this.toggleAge.bind(this);
-    this.toggleYear = this.toggleYear.bind(this);
-    this.toggleMonthYear = this.toggleMonthYear.bind(this);
-    this.toggleDate = this.toggleDate.bind(this);
+    this.renderYears = this.renderYears.bind(this);
+    this.togglePrecision = this.togglePrecision.bind(this);
+    this.toggleGranularity = this.toggleGranularity.bind(this);
     this.changeYear = this.changeYear.bind(this);
     this.changeMonth = this.changeMonth.bind(this);
     this.changeDate = this.changeDate.bind(this);
   }
 
-  toggleAbout() {
-    this.setState({precision: 'About'});
+
+  // Render the years
+  renderYears(start, end) {
+    return Array(end - start + 1).fill(undefined).map(
+      (x, idx) => {
+        var year = start + idx;
+        return <option key={'year' + year} value={year}>{year}</option>;
+      }
+    );
   }
 
-  toggleBefore() {
-    this.setState({precision: 'Before'});
+  togglePrecision(value) {
+    this.setState({precision: value});
   }
 
-  toggleAfter() {
-    this.setState({precision: 'After'});
-  }
-
-  toggleUnknown() {
-    this.setState({precision: 'Unknown'});
-  }
-
-  toggleAge() {
-    this.setState({granularity: 'AGE'});
-  }
-
-  toggleYear() {
-    this.setState({granularity: 'YEAR'});
-  }
-
-  toggleMonthYear() {
-    this.setState({granularity: 'MONTHYEAR'});
-  }
-
-  toggleDate() {
-    this.setState({granularity: 'DATE'});
+  toggleGranularity(value) {
+    this.setState({granularity: value});
   }
 
   changeYear(event) {
-    this.setState({fuzzyYear: event.target.value});
+    this.setState({fuzzyDate: this.state.fuzzyDate.year(event.target.value)});
   }
 
   changeMonth(event) {
-    this.setState({fuzzyMonth: event.target.value});
+    this.setState({fuzzyDate: this.state.fuzzyDate.month(event.target.value)});
   }
 
   changeDate(event) {
     // Returns a moment event object
-    this.setState({fuzzyDate: event.format('ll')});
+    this.setState({fuzzyDate: event});
   }
 
   // Getting our feet wet
@@ -102,46 +80,51 @@ class FuzzyDatePicker extends React.Component {
         }
 
         <ul className="list-selectable list-divided">
-          <li onClick={this.toggleAbout}>About</li>
-          <li onClick={this.toggleBefore}>Before</li>
-          <li onClick={this.toggleAfter}>After</li>
-          <li onClick={this.toggleUnknown}>Unknown</li>
+          <li className={ this.state.precision === 'About' ? "selected" : null } onClick={() => this.togglePrecision('About')}>About</li>
+          <li className={ this.state.precision === 'Before' ? "selected" : null } onClick={() => this.togglePrecision('Before')}>Before</li>
+          <li className={ this.state.precision === 'After' ? "selected" : null } onClick={() => this.togglePrecision('After')}>After</li>
+          <li className={ this.state.precision === 'Unknown' ? "selected" : null } onClick={() => this.togglePrecision('Unknown')}>Unknown</li>
         </ul>
         <br/>
         <ul className="list-selectable list-divided">
-          <li onClick={this.toggleAge}>Basis date</li>
-          <li onClick={this.toggleYear}>Year</li>
-          <li onClick={this.toggleMonthYear}>Month/Year</li>
-          <li onClick={this.toggleDate}>Date</li>
+          <li className={ this.state.granularity === 'BASISDATE' ? "selected" : null } onClick={() => this.toggleGranularity('BASISDATE')}>Basis date</li>
+          <li className={ this.state.granularity === 'YEAR' ? "selected" : null } onClick={() => this.toggleGranularity('YEAR')}>Year</li>
+          <li className={ this.state.granularity === 'MONTHYEAR' ? "selected" : null } onClick={() => this.toggleGranularity('MONTHYEAR')}>Month/Year</li>
+          <li className={ this.state.granularity === 'DATE' ? "selected" : null } onClick={() => this.toggleGranularity('DATE')}>Date</li>
         </ul>
         <br/>
 
-        { this.state.granularity === 'AGE' ?
-          <p>{this.props.basisDate.toString()}</p> : null }
+        { this.state.granularity === 'BASISDATE' ?
+          <p>{moment(this.props.basisDate).format('ll')}</p> : null }
 
         { this.state.granularity === 'MONTHYEAR' ?
-          <select onChange={this.changeMonth} name="month">
-            <option value="January">January</option>
-            <option value="February">February</option>
-            <option value="March">March</option>
-            <option value="April">April</option>
-            <option value="May">May</option>
-            <option value="June">June</option>
-            <option value="July">July</option>
-            <option value="August">August</option>
-            <option value="September">September</option>
-            <option value="October">October</option>
-            <option value="November">November</option>
-            <option value="December">December</option>
+          <select onChange={this.changeMonth} value={this.state.fuzzyDate.month()} name="month">
+            <option value="0">January</option>
+            <option value="1">February</option>
+            <option value="2">March</option>
+            <option value="3">April</option>
+            <option value="4">May</option>
+            <option value="5">June</option>
+            <option value="6">July</option>
+            <option value="7">August</option>
+            <option value="8">September</option>
+            <option value="9">October</option>
+            <option value="10">November</option>
+            <option value="11">December</option>
           </select> : null }
         { this.state.granularity === 'YEAR' || this.state.granularity === 'MONTHYEAR' ?
-          <select onChange={this.changeYear} name="year">{renderYears(this.props.startYear, this.props.endYear)}</select> : null }
+          <select onChange={this.changeYear} value={this.state.fuzzyDate.year()} name="year">
+            { this.renderYears(moment(this.props.minDate).year(), moment(this.props.maxDate).year())}
+          </select> : null }
 
-        { this.state.granularity === 'DATE' ? <DatePicker onChange={this.changeDate} /> : null }
+        { this.state.granularity === 'DATE' ? <DatePicker onChange={this.changeDate} minDate={moment(this.props.minDate)} maxDate={moment(this.props.maxDate)} selectedDate={this.state.fuzzyDate}/> : null }
 
         <br/>
         <br/>
-        <p>Fuzzy Date: { this.state.precision + " " + (this.state.granularity === 'DATE' ? this.state.fuzzyDate : this.state.granularity === 'YEAR' ? this.state.fuzzyYear : this.state.fuzzyMonth + " " + this.state.fuzzyYear) }</p>
+        <p>Fuzzy Date: { this.state.precision === 'Unknown'?
+          this.state.precision : this.state.precision + " " + (this.state.granularity === 'DATE' ?
+            this.state.fuzzyDate.format('ll') : this.state.granularity === 'YEAR' ?
+              this.state.fuzzyDate.format('YYYY') : this.state.fuzzyDate.format('MMM YYYY')) }</p>
       </div>)
     );
   }
