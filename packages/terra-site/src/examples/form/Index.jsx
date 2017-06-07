@@ -8,6 +8,7 @@ import ReadMe from 'terra-form/docs/README.md';
 import FieldDocs from 'terra-form/docs/Field.md';
 import FieldsetDocs from 'terra-form/docs/Fieldset.md';
 import InputDocs from 'terra-form/docs/Input.md';
+import SelectFieldDocs from 'terra-form/docs/SelectField.md';
 
 import { version } from 'terra-form/package.json';
 
@@ -15,6 +16,7 @@ import { version } from 'terra-form/package.json';
 import FieldSrc from '!raw-loader!terra-form/src/Field';
 import FieldsetSrc from '!raw-loader!terra-form/src/Fieldset';
 import InputSrc from '!raw-loader!terra-form/src/Input';
+import SelectFieldSrc from '!raw-loader!terra-form/src/SelectField';
 
 // Example Files
 import ControlledInputDocs from './docs/ControlledInput.md';
@@ -22,6 +24,7 @@ import ControlledInput from './examples/ControlledInput';
 import FieldExamples from './examples/Field';
 import FieldsetExamples from './examples/Fieldset';
 import InputExamples from './examples/Input';
+import SelectFieldExamples from './examples/SelectField';
 
 const scrollToComponent = (id) => {
   document.querySelector(id).scrollIntoView();
@@ -42,6 +45,9 @@ const FormsExamples = () => (
     <div>
       <Button text="Input" variant="link" onClick={() => { scrollToComponent('#input'); }} />
     </div>
+    <div>
+      <Button text="Select Field" variant="link" onClick={() => { scrollToComponent('#select-field'); }} />
+    </div>
     <Markdown id="field-docs" src={FieldDocs} />
     <PropsTable id="field-props" src={FieldSrc} />
     <FieldExamples />
@@ -51,6 +57,9 @@ const FormsExamples = () => (
     <Markdown id="input-docs" src={InputDocs} />
     <PropsTable id="input-props" src={InputSrc} />
     <InputExamples />
+    <Markdown id="select-docs" src={SelectFieldDocs} />
+    <PropsTable id="select-field-props" src={SelectFieldSrc} />
+    <SelectFieldExamples />
     <Markdown id="controlled-example" src={ControlledInputDocs} />
     <ControlledInput />
   </div>
