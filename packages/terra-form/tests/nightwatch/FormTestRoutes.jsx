@@ -11,6 +11,10 @@ import PopulatedFieldset from './fieldset/PopulatedFieldset';
 import DefaultInput from './input/DefaultInput';
 import PopulatedInputUncontrolled from './input/PopulatedInputUncontrolled';
 import PopulatedInputControlled from './input/PopulatedInputControlled';
+import DefaultSelect from './select/DefaultSelect';
+import PopulatedSelect from './select/PopulatedSelect';
+import DefaultSelectField from './select-field/DefaultSelectField';
+import PopulatedSelectField from './select-field/PopulatedSelectField';
 
 const routes = (
   <div>
@@ -22,6 +26,10 @@ const routes = (
     <Route path="/tests/form-tests/input/default" component={DefaultInput} />
     <Route path="/tests/form-tests/input/populated_controlled" component={PopulatedInputControlled} />
     <Route path="/tests/form-tests/input/populated_uncontrolled" component={PopulatedInputUncontrolled} />
+    <Route path="/tests/form-tests/select/default" component={DefaultSelect} />
+    <Route path="/tests/form-tests/select/populated" component={PopulatedSelect} />
+    <Route path="/tests/form-tests/select-field/default" component={DefaultSelectField} />
+    <Route path="/tests/form-tests/select-field/populated" component={PopulatedSelectField} />
   </div>
 );
 
