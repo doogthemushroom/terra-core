@@ -15,6 +15,7 @@ import ContentContainerExamples from './examples/content-container/Index';
 import DatePickerExamples from './examples/date-picker/Index';
 import DemographicsBannerExamples from './examples/demographics-banner/Index';
 import FormExamples from './examples/form/Index';
+import FuzzyDatePickerExamples from './examples/fuzzy-date-picker/Index';
 import GridExamples from './examples/grid/Index';
 import HeadingExamples from './examples/heading/Index';
 import I18nExamples from './examples/i18n/Index';
@@ -84,6 +85,7 @@ ReactDOM.render((
       <Route path="button-group" component={ButtonGroupExamples} />
       <Route path="content-container" component={ContentContainerExamples} />
       <Route path="datepicker" component={DatePickerExamples} />
+      <Route path="fuzzydatepicker" component={FuzzyDatePickerExamples} />
       <Route path="demographics-banner" component={DemographicsBannerExamples} />
       <Route path="form" component={FormExamples} />
       <Route path="grid" component={GridExamples} />

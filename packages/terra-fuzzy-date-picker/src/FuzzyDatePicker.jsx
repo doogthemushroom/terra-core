@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import moment from 'moment';
 import 'terra-base/lib/baseStyles';
 // eslint-disable-next-line import/no-webpack-loader-syntax, import/first, import/no-unresolved, import/extensions
+import Fieldset from 'terra-form/lib/Fieldset';
 import DatePicker from 'terra-date-picker/lib/DatePicker';
 import SelectField from 'terra-form/lib/SelectField';
 import './FuzzyDatePicker.scss';
@@ -32,23 +33,12 @@ class FuzzyDatePicker extends React.Component {
     this.changeDate = this.changeDate.bind(this);
   }
 
-
-  // Render the years
-  renderYears(start, end) {
-    return Array((end - start) + 1).fill(undefined).map(
-      (x, idx) => {
-        const year = start + idx;
-        return <option key={`year ${year}`} value={year}>{year}</option>;
-      },
-    );
+  togglePrecision(event) {
+    this.setState({ precision: event.target.value });
   }
 
-  togglePrecision(value) {
-    this.setState({ precision: value });
-  }
-
-  toggleGranularity(value) {
-    this.setState({ granularity: value });
+  toggleGranularity(event) {
+    this.setState({ granularity: event.target.value });
   }
 
   changeYear(event) {
@@ -64,49 +54,40 @@ class FuzzyDatePicker extends React.Component {
     this.setState({ fuzzyDate: event });
   }
 
-  // Getting our feet wet
+  // Render the years
+  renderYears(start, end) {
+    return Array((end - start) + 1).fill(undefined).map(
+      (x, idx) => {
+        const year = start + idx;
+        return <option key={`year ${year}`} value={year}>{year}</option>;
+      },
+    );
+  }
+
   render() {
     return (
-      (<div className="terra-fuzzy">
-
-        {
-        // <SingleSelectList onChange={this.changePrecision} isDivided hasChevrons={false}>
-        //   <SingleSelectList.Item content={<p>About</p>} key="precAbout" />
-        //   <SingleSelectList.Item content={<p>Before</p>} key="precBefore" />
-        //   <SingleSelectList.Item content={<p>After</p>} key="precAfter" />
-        //   <SingleSelectList.Item content={<p>Unknown</p>} key="precUnknown" />
-        // </SingleSelectList>
-        }
+      (<Fieldset legend="Onset Date" className="terra-fuzzy">
 
         <SelectField
           choices={['About', 'Before', 'After', 'Unknown']}
           label="Precision"
           name="precision"
           defaultValue="About"
-          onChange={() => this.togglePrecision(this.value)}
+          onChange={this.togglePrecision}
         />
 
-        {
-        // <ul className="list-selectable list-divided" onChange={() => this.togglePrecision(this.value)}>
-        //   <li className={this.state.precision === 'About' ? 'selected' : null}>About</li>
-        //   <li className={this.state.precision === 'Before' ? 'selected' : null}>Before</li>
-        //   <li className={this.state.precision === 'After' ? 'selected' : null}>After</li>
-        //   <li className={this.state.precision === 'Unknown' ? 'selected' : null}>Unknown</li>
-        // </ul>
-        }
-        <br />
-        <ul className="list-selectable list-divided" onChange={() => this.togglePrecision(this.value)}>
-          <li className={this.state.granularity === 'BASISDATE' ? 'selected' : null}>Basis date</li>
-          <li className={this.state.granularity === 'YEAR' ? 'selected' : null}>Year</li>
-          <li className={this.state.granularity === 'MONTHYEAR' ? 'selected' : null}>Month/Year</li>
-          <li className={this.state.granularity === 'DATE' ? 'selected' : null}>Date</li>
-        </ul>
-        <br />
+        <SelectField
+          choices={['Basis Date', 'Year', 'Month/Year', 'Date']}
+          label="Granularity"
+          name="granularity"
+          defaultValue="Year"
+          onChange={this.toggleGranularity}
+        />
 
-        { this.state.granularity === 'BASISDATE' ?
+        { this.state.granularity === 'Basis Date' ?
           <p>{moment(this.props.basisDate).format('ll')}</p> : null }
 
-        { this.state.granularity === 'MONTHYEAR' ?
+        { this.state.granularity === 'Month/Year' ?
           <select onChange={this.changeMonth} value={this.state.fuzzyDate.month()} name="month">
             <option value="0">January</option>
             <option value="1">February</option>
@@ -121,20 +102,20 @@ class FuzzyDatePicker extends React.Component {
             <option value="10">November</option>
             <option value="11">December</option>
           </select> : null }
-        { this.state.granularity === 'YEAR' || this.state.granularity === 'MONTHYEAR' ?
+        { this.state.granularity === 'Year' || this.state.granularity === 'Month/Year' ?
           <select onChange={this.changeYear} value={this.state.fuzzyDate.year()} name="year">
             { this.renderYears(moment(this.props.minDate).year(), moment(this.props.maxDate).year())}
           </select> : null }
 
-        { this.state.granularity === 'DATE' ? <DatePicker onChange={this.changeDate} minDate={moment(this.props.minDate)} maxDate={moment(this.props.maxDate)} selectedDate={this.state.fuzzyDate} /> : null }
+        { this.state.granularity === 'Date' ? <DatePicker onChange={this.changeDate} minDate={moment(this.props.minDate)} maxDate={moment(this.props.maxDate)} selectedDate={this.state.fuzzyDate} /> : null }
 
         <br />
         <br />
         <p>Fuzzy Date: { this.state.precision === 'Unknown' ?
-          this.state.precision : this.state.precision + ' ' + (this.state.granularity === 'DATE' ?
-            this.state.fuzzyDate.format('ll') : this.state.granularity === 'YEAR' ?
+          this.state.precision : this.state.precision + ' ' + (this.state.granularity === 'Date' ?
+            this.state.fuzzyDate.format('ll') : this.state.granularity === 'Year' ?
               this.state.fuzzyDate.format('YYYY') : this.state.fuzzyDate.format('MMM YYYY')) }</p>
-      </div>)
+      </Fieldset>)
     );
   }
 }
