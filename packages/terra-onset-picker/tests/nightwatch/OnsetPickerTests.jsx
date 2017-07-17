@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 const OnsetPickerTests = () => (
   <div>
     <ul>
-      <li><Link to="/tests/onset-picker/control/default">Default Control</Link></li>
+      <li><Link to="/tests/onset-picker/default">Default</Link></li>
     </ul>
   </div>
 );
