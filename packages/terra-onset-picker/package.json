@@ -38,7 +38,6 @@
   },
   "homepage": "https://github.com/cerner/terra-core#readme",
   "devDependencies": {
-    "react-intl": "^2.3.0",
     "terra-toolkit": "^0.x"
   },
   "peerDependencies": {
@@ -50,6 +49,7 @@
     "moment": "^2.17.1",
     "terra-base": "^0.x",
     "terra-date-picker": "^0.x",
+    "terra-i18n": "1.0.0",
     "terra-form": "^0.x"
   }
 }

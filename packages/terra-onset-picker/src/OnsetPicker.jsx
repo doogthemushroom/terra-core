@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import moment from 'moment';
 import 'terra-base/lib/baseStyles';
+import { injectIntl } from 'react-intl';
 import Field from 'terra-form/lib/Field';
 import Fieldset from 'terra-form/lib/Fieldset';
 import NumberField from 'terra-form/lib/NumberField';
@@ -20,7 +21,7 @@ const propTypes = {
   granularity: PropTypes.string,
 
   /**
-   * The precision of the onset date. AGE, YEAR, MONTHYEAR, and DATE are accepted.
+   * The precision of the onset date. YEAR, MONTHYEAR, and DATE are accepted.
    */
   precision: PropTypes.string,
 
@@ -28,6 +29,11 @@ const propTypes = {
    * The ISO 8601 string representation of the onset date to view/modify.
    */
   onsetDate: PropTypes.string,
+
+  /**
+   * The i18n context passed down by the base component
+   */
+  intl: PropTypes.object.isRequired,
 };
 
 const defaultProps = {
@@ -35,6 +41,7 @@ const defaultProps = {
   granularity: 'MONTHYEAR',
   precision: 'ABOUT',
   onsetDate: moment().format('YYYY-MM-DD'),
+  intl: undefined,
 };
 
 class OnsetPicker extends React.Component {
@@ -126,24 +133,26 @@ class OnsetPicker extends React.Component {
     const start = moment(this.props.birthdate);
     const end = moment();
     const onsetYear = moment(this.state.onsetDate).year();
-    const possibleMonths = [{ value: 0, display: 'January' },
-                            { value: 1, display: 'February' },
-                            { value: 2, display: 'March' },
-                            { value: 3, display: 'April' },
-                            { value: 4, display: 'May' },
-                            { value: 5, display: 'June' },
-                            { value: 6, display: 'July' },
-                            { value: 7, display: 'August' },
-                            { value: 8, display: 'September' },
-                            { value: 9, display: 'October' },
-                            { value: 10, display: 'November' },
-                            { value: 11, display: 'December' }];
+    let possibleMonths = [{ value: 0, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.january' }) },
+                          { value: 1, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.february' }) },
+                          { value: 2, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.march' }) },
+                          { value: 3, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.april' }) },
+                          { value: 4, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.may' }) },
+                          { value: 5, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.june' }) },
+                          { value: 6, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.july' }) },
+                          { value: 7, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.august' }) },
+                          { value: 8, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.september' }) },
+                          { value: 9, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.october' }) },
+                          { value: 10, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.november' }) },
+                          { value: 11, display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.december' }) }];
 
     // If populating months for the start or end year, exclude months before the starting date or after the ending date
     if (start.year() === onsetYear) {
-      return possibleMonths.filter(month => month.value >= start.month());
-    } else if (end.year() === onsetYear) {
-      return possibleMonths.filter(month => month.value <= end.month());
+      possibleMonths = possibleMonths.filter(month => month.value >= start.month());
+    }
+
+    if (end.year() === onsetYear) {
+      possibleMonths = possibleMonths.filter(month => month.value <= end.month());
     }
 
     return possibleMonths;
@@ -239,10 +248,10 @@ class OnsetPicker extends React.Component {
 
         {/* Precision */}
         <SelectField
-          choices={[{ value: 'ABOUT', display: 'About' },
-                    { value: 'BEFORE', display: 'Before' },
-                    { value: 'AFTER', display: 'After' },
-                    { value: 'UNKNOWN', display: 'Unknown' }]}
+          choices={[{ value: 'ABOUT', display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.precisionAbout' }) },
+                    { value: 'BEFORE', display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.precisionBefore' }) },
+                    { value: 'AFTER', display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.precisionAfter' }) },
+                    { value: 'UNKNOWN', display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.precisionUnknown' }) }]}
           name="precision"
           defaultValue={this.state.precision}
           onChange={this.changePrecision}
@@ -252,10 +261,10 @@ class OnsetPicker extends React.Component {
         {/* Granularity */}
         { this.state.precision !== 'UNKNOWN' &&
           <SelectField
-            choices={[{ value: 'MONTHYEAR', display: 'Month/Year' },
-                      { value: 'YEAR', display: 'Year' },
-                      { value: 'AGE', display: 'Age' },
-                      { value: 'DATE', display: 'Date' }]}
+            choices={[{ value: 'MONTHYEAR', display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.granularityMonthYear' }) },
+                      { value: 'YEAR', display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.granularityYear' }) },
+                      { value: 'AGE', display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.granularityAge' }) },
+                      { value: 'DATE', display: this.props.intl.formatMessage({ id: 'Terra.onsetPicker.granularityDate' }) }]}
             name="granularity"
             defaultValue={this.state.granularity}
             onChange={this.changeGranularity}
@@ -334,4 +343,4 @@ class OnsetPicker extends React.Component {
 OnsetPicker.propTypes = propTypes;
 OnsetPicker.defaultProps = defaultProps;
 
-export default OnsetPicker;
+export default injectIntl(OnsetPicker);

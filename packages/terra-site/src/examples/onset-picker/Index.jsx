@@ -17,13 +17,20 @@ const OnsetPickerExamples = () => (
     <PropsTable id="props" src={OnsetPickerSrc} />
     <h2>TODO</h2>
     <ul>
-      <li>I18n</li>
       <li>Testing</li>
       <li>Better ouput (needs to include all information)</li>
+      <li>Actual Translations</li>
     </ul>
     <br />
     <h2 id="default">Default with initialization</h2>
-    <OnsetPicker birthdate={moment().subtract(6, 'weeks').format()} />
+    <OnsetPicker birthdate={moment().subtract(6, 'years').format()} />
+    <h2 id="supplied">Supplied with onset date</h2>
+    <OnsetPicker
+      birthdate={moment().subtract(6, 'years').format()}
+      granularity="YEAR"
+      precision="BEFORE"
+      onsetDate={moment().subtract(2, 'years').format()}
+    />
   </div>
 );
 

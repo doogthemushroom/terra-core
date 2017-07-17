@@ -16,4 +16,10 @@ module.exports = {
       .url(`http://localhost:${browser.globals.webpackDevServerPort}/#/tests/onset-picker/default`)
       .assert.elementPresent('.terra-onset');
   },
+
+  'Displays four precision options': (browser) => {
+    browser
+      .url(`http://localhost:${browser.globals.webpackDevServerPort}/#/tests/onset-picker/default`)
+      .assert.elementPresent('select');
+  },
 };
