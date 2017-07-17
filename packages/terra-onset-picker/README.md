@@ -1,18 +1,18 @@
-# Terra Fuzzy Date Picker
+# Terra Onset Picker
 
 
-[![NPM version](http://img.shields.io/npm/v/terra-form.svg)](https://www.npmjs.org/package/terra-fuzzy-date-picker)
+[![NPM version](http://img.shields.io/npm/v/terra-onset-picker.svg)](https://www.npmjs.org/package/terra-onset-picker)
 [![Build Status](https://travis-ci.org/cerner/terra-core.svg?branch=master)](https://travis-ci.org/cerner/terra-core)
 
-Components for building forms
+The terra-onset-picker component provides users a way to enter or select an approximate date.
 
 - [Getting Started](#getting-started)
-- [Documentation](https://github.com/cerner/terra-core/tree/master/packages/terra-fuzzy-date-picker/docs)
+- [Documentation](https://github.com/cerner/terra-core/tree/master/packages/terra-onset-picker/docs)
 - [LICENSE](#license)
 
 ## Getting Started
 
-- Install from [npmjs](https://www.npmjs.com): `npm install terra-fuzzy-date-picker`
+- Install from [npmjs](https://www.npmjs.com): `npm install terra-onset-picker`
 
 ## LICENSE
 

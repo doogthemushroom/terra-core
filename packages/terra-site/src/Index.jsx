@@ -15,7 +15,6 @@ import ContentContainerExamples from './examples/content-container/Index';
 import DatePickerExamples from './examples/date-picker/Index';
 import DemographicsBannerExamples from './examples/demographics-banner/Index';
 import FormExamples from './examples/form/Index';
-import FuzzyDatePickerExamples from './examples/fuzzy-date-picker/Index';
 import GridExamples from './examples/grid/Index';
 import HeadingExamples from './examples/heading/Index';
 import I18nExamples from './examples/i18n/Index';
@@ -24,6 +23,7 @@ import ImageExamples from './examples/image/Index';
 import ListExamples from './examples/list/Index';
 import ModalExamples from './examples/modal/Index';
 import ModalManagerExamples from './examples/modal-manager/Index';
+import OnsetPickerExamples from './examples/onset-picker/Index';
 import ProgressBarExamples from './examples/progress-bar/Index';
 import ResponsiveElementExamples from './examples/responsive-element/Index';
 import SearchFieldExamples from './examples/search-field/Index';
@@ -58,6 +58,7 @@ import SingleSelectListTestRoutes from 'terra-list/tests/nightwatch/single-selec
 import MultiSelectListTestRoutes from 'terra-list/tests/nightwatch/multi-select-list/MultiSelectListTestRoutes';
 import ModalTestRoutes from 'terra-modal/tests/nightwatch/ModalTestRoutes';
 import ModalManagerTestRoutes from 'terra-modal-manager/tests/nightwatch/ModalManagerTestRoutes';
+import OnsetPickerTestRoutes from 'terra-onset-picker/tests/nightwatch/OnsetPickerTestRoutes';
 import ProgressBarTestRoutes from 'terra-progress-bar/tests/nightwatch/ProgressBarTestRoutes';
 import ResponsiveElementTestRoutes from 'terra-responsive-element/tests/nightwatch/ResponsiveElementTestRoutes';
 import SearchFieldTestRoutes from 'terra-search-field/tests/nightwatch/SearchFieldTestRoutes';
@@ -85,7 +86,6 @@ ReactDOM.render((
       <Route path="button-group" component={ButtonGroupExamples} />
       <Route path="content-container" component={ContentContainerExamples} />
       <Route path="datepicker" component={DatePickerExamples} />
-      <Route path="fuzzydatepicker" component={FuzzyDatePickerExamples} />
       <Route path="demographics-banner" component={DemographicsBannerExamples} />
       <Route path="form" component={FormExamples} />
       <Route path="grid" component={GridExamples} />
@@ -96,6 +96,7 @@ ReactDOM.render((
       <Route path="list" component={ListExamples} />
       <Route path="modal" component={ModalExamples} />
       <Route path="modal-manager" component={ModalManagerExamples} />
+      <Route path="onsetpicker" component={OnsetPickerExamples} />
       <Route path="progress-bar" component={ProgressBarExamples} />
       <Route path="responsive-element" component={ResponsiveElementExamples} />
       <Route path="search-field" component={SearchFieldExamples} />
@@ -131,6 +132,7 @@ ReactDOM.render((
     {TimeInputTestRoutes}
     {ModalTestRoutes}
     {ModalManagerTestRoutes}
+    {OnsetPickerTestRoutes}
     {ProgressBarTestRoutes}
     {GridTestRoutes}
     {IconTestRoutes}
