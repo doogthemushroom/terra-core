@@ -44,15 +44,21 @@ const propTypes = {
    * The value to start the select on.
    */
   defaultValue: PropTypes.string,
+
+  /**
+   * The value of the select element. Use this to create a controlled input.
+   */
+  value: PropTypes.string,
 };
 
 const defaultProps = {
-  choices: undefined,
-  options: undefined,
+  choices: null,
+  options: null,
   onChange: undefined,
   name: null,
   required: false,
-  defaultValue: null,
+  defaultValue: undefined,
+  value: undefined,
 };
 
 const Select = ({
@@ -62,6 +68,7 @@ const Select = ({
   name,
   required,
   defaultValue,
+  value,
   ...customProps
 }) => {
   const additionalSelectProps = Object.assign({}, customProps);
@@ -86,6 +93,7 @@ const Select = ({
       required={required}
       onChange={onChange}
       defaultValue={defaultValue}
+      value={value}
       className={selectClasses}
     >
       {options.map(option => <option key={`${option.value}-${option.display}`} value={option.value}>{option.display}</option>)}
