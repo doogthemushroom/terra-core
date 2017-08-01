@@ -8,19 +8,22 @@ import styles from './Select.scss';
 const cx = classNames.bind(styles);
 
 const propTypes = {
+
   /**
-   * List of object key/value pairs for choices to be selected.
+   * WARNING: This prop is deprecated, please use the options prop.
+   * List of choices to be selected.
+   * If choices and options array are supplied, options array will be used over choices.
    */
-  choices: PropTypes.arrayOf(PropTypes.shape({
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
-    display: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
-  }).isRequired),
+  choices: PropTypes.array,
+
+  /**
+   * List of object key and value pairs for choices to be selected.
+   * If choices and options array are supplied, options array will be used over choices.
+   */
+  options: PropTypes.arrayOf(PropTypes.shape({
+    value: PropTypes.string.isRequired,
+    display: PropTypes.string.isRequired,
+  })),
 
   /**
    * Function to trigger when the user changes the select value. Provide a function to create a controlled input.
@@ -40,13 +43,12 @@ const propTypes = {
   /**
    * The value to start the select on.
    */
-  defaultValue: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-  ]),
+  defaultValue: PropTypes.string,
 };
 
 const defaultProps = {
+  choices: undefined,
+  options: undefined,
   onChange: undefined,
   name: null,
   required: false,
@@ -55,6 +57,7 @@ const defaultProps = {
 
 const Select = ({
   choices,
+  options,
   onChange,
   name,
   required,
@@ -68,6 +71,14 @@ const Select = ({
     additionalSelectProps['aria-required'] = 'true';
   }
 
+  if (choices && options === undefined) {
+    // Build out key & value array for deprecated choices prop
+    options = choices.map(choice => ({ value: choice, display: choice }));
+    /* eslint-disable no-console */
+    console.warn('The choices prop for the Terra Form Select component is deprecated and will be removed in a later release. Please use the options prop instead https://terra-ui.herokuapp.com/components/core/form#select.');
+    /* eslint-disable no-console */
+  }
+
   return (
     <select
       {...additionalSelectProps}
@@ -77,7 +88,7 @@ const Select = ({
       defaultValue={defaultValue}
       className={selectClasses}
     >
-      {choices.map(choice => <option key={choice.value} value={choice.value}>{choice.display}</option>)}
+      {options.map(option => <option key={option.value} value={option.value}>{option.display}</option>)}
     </select>
   );
 };
