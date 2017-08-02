@@ -3,9 +3,6 @@ Changelog
 
 Unreleased
 ----------
-### Changed
-* Converted component to use CSS modules
-* Converted SCSS variables to CSS custom properties for theming
 
 3.6.0 - (August 1, 2017)
 ------------------
